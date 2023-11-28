@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ quiz_title }} ({{ session['questions_left'] }}/{{ session['sum_questions'] }})</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                // When a radio button changes
+                $('.selection input[type="radio"]').change(function() {
+                    // Unhighlight all selections in the same group
+                    $('input[name="' + $(this).attr('name') + '"]').each(function() {
+                        $(this).closest('.selection').removeClass('checked');
+                    });
+
+                    // Highlight this selection
+                    if (this.checked) {
+                        $(this).closest('.selection').addClass('checked');
+                    }
+                });
+
+                // When a checkbox changes
+                $('.selection input[type="checkbox"]').change(function() {
+                    // Toggle the 'checked' class for this checkbox's selection
+                    $(this).closest('.selection').toggleClass('checked', this.checked);
+                });
+
+                $('.selection').click(function(event) {
+                    // Find the input within this .selection and toggle its state
+                    var input = $(this).find('input');
+                    if (
+                        event.target.type !== 'checkbox' && 
+                        event.target.type !== 'radio' &&
+                        event.target.tagName !== 'LABEL'
+                    ) {
+                        input.trigger('click');
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="form-container">
+            {% if session['feedback'] %}
+            <div class="instructions">
+                ({{ session['questions_left'] }}/{{ session['sum_questions'] }})
+                <h1>
+                    {{ session['got_question'] }}
+                </h1>
+                <div class="{{ session['feedback_class'] }}">{{ session['feedback'] }}</div>
+                <ul>
+                    {% for answer in session['correct_options'] %}
+                        <li>
+                            {{ answer }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+                <form action="{{ url_for('quiz') }}" method="post">
+                    <div class="submitting-area">
+                        <button type="submit" name="next" value="1">Next Question</button>
+                    </div>
+                </form>
+            {% else %}
+                <div class="question">{{ question.text }}</div>
+                <div class="instructions">
+                    ({{ session['questions_left'] }}/{{ session['sum_questions'] }}) <br />
+                    Select {{ num_select }} choice{% if question.is_multiple_choice %}s{% endif %}:
+                </div>
+                <div class="answer-form">
+                    <form id="quizForm" action="{{ url_for('quiz') }}" method="post">
+                        {% for option in question.options %}
+                            <div class="selection">
+                                {% if question.is_multiple_choice %}
+                                    <input type="checkbox" id="{{ loop.index }}" name="answer" value="{{ option }}">
+                                {% else %}
+                                    <input type="radio" id="{{ loop.index }}" name="answer" value="{{ option }}">
+                                {% endif %}
+                                <label for="{{ loop.index }}">{{ option }}</label><br>
+                            </div>
+                        {% endfor %}
+                        <div class="submitting-area">
+                            <button type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </body>
+</html>

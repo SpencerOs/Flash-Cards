@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charest="UTF=8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Select Quiz</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+        <h1>Select Quiz</h1>
+        <form action="/quiz" method="post">
+            <div class="submitting-area">
+                <div class="abs-center">
+                    <select name="selected_file">
+                        {% for file in files %}
+                        <option value="{{ file }}">{{ file }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit">Start Quiz</button>
+            </div>
+        </form>
+    </body>
+</html>
