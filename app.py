@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from pprint import pprint
 from typing import Final
 import json
 import random
@@ -37,7 +36,6 @@ def quiz():
             session.clear()
             selected_file = request.form['selected_file']
             questions_data = load_questions(selected_file)
-            pprint(questions_data[0])
             question_ids = [question['id'] for question in questions_data]
             session[remaining_questions_STR] = question_ids
             session[selected_file_STR] = selected_file
