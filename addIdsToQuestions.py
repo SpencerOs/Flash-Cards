@@ -19,7 +19,7 @@ if isinstance(questions_data, list):
 
     # Update the JSON file with the new data
     with open(json_file_path, 'w') as file:
-        json.dump(questions_data, file, indent=2)
+        json.dump(questions_data, file, indent=4)
 
     print("Ids added and JSON file updated successsfully.")
 else:

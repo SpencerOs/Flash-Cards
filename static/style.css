@@ -146,6 +146,16 @@ h1, h2 {
     background-color: #45A049;
 }
 
+table {
+    margin: 1rem;
+}
+
+td, th {
+    border-width: 0.07rem;
+    border-style: solid;
+    padding: 0.75rem;
+}
+
 
 /* Override style for mobile devices */
 @media (max-width: 768px) {
@@ -159,7 +169,7 @@ h1, h2 {
     }
 
     .question {
-        font-size: 2rem;
+        font-size: 1.25rem;
         margin-top: 3rem;
         padding-bottom: 0;
     }

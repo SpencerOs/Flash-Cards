@@ -1,41 +1,70 @@
 [
-  {
-    "text": "What is the capital of France?",
-    "options": [
-      "Paris",
-      "London",
-      "Rome",
-      "Berlin"
-    ],
-    "correct": [
-      "Paris"
-    ],
-    "id": "000"
-  },
-  {
-    "text": "Which elements are gases at room temperature?",
-    "options": [
-      "Oxygen",
-      "Carbon",
-      "Nitrogen",
-      "Helium"
-    ],
-    "correct": [
-      "Oxygen",
-      "Nitrogen",
-      "Helium"
-    ],
-    "id": "001"
-  },
-  {
-    "text": "Is Python a programming language?",
-    "options": [
-      "True",
-      "False"
-    ],
-    "correct": [
-      "True"
-    ],
-    "id": "002"
-  }
+    {
+        "text": "What is the capital of France?",
+        "options": [
+            "Paris",
+            "London",
+            "Rome",
+            "Berlin"
+        ],
+        "correct": [
+            "Paris"
+        ],
+        "id": "000"
+    },
+    {
+        "text": "Which elements are gases at room temperature?",
+        "options": [
+            "Oxygen",
+            "Carbon",
+            "Nitrogen",
+            "Helium"
+        ],
+        "correct": [
+            "Oxygen",
+            "Nitrogen",
+            "Helium"
+        ],
+        "id": "001"
+    },
+    {
+        "text": "Is Python a programming language?",
+        "options": [
+            "True",
+            "False"
+        ],
+        "correct": [
+            "True"
+        ],
+        "id": "002"
+    },
+    {
+        "text": "Select the value in the bottom right-hand corner of the table",
+        "options": [
+            "yeah",
+            "nope"
+        ],
+        "matrix": {
+            "header": [
+                "Left",
+                "Right"
+            ],
+            "records": [
+                {
+                    "name": "Top",
+                    "Left": "nope",
+                    "Right": "nope"
+                },
+                {
+                    "name": "Bottom",
+                    "Left": "nope",
+                    "Right": "yeah"
+                }
+            ]
+        },
+        "correct": [
+            "yeah"
+        ],
+        "id": "003"
+    }
 ]

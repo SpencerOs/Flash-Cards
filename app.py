@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+from pprint import pprint
 from typing import Final
 import json
 import random
@@ -77,7 +78,6 @@ def quiz():
         num_select = len(current_question[correct_STR])
         quiz_title = session[selected_file_STR].rsplit('.', 1)[0] # Extract title from filename
         session['questions_left'] = len(session[remaining_questions_STR])
-
         return render_template('quiz.html', question=current_question,
                                             quiz_title=quiz_title,
                                             num_select=num_select)
@@ -97,6 +97,7 @@ def load_questions(filename):
 
     for question in questions:
         question['is_multiple_choice'] = len(question[correct_STR]) > 1
+        question['has_matrix'] = 'matrix' in question
 
     return questions
 

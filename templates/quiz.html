@@ -64,7 +64,30 @@
                     </div>
                 </form>
             {% else %}
-                <div class="question">{{ question.text }}</div>
+                <div class="question">{{ question.text }}<br />
+                    {% if question.has_matrix %}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    {% for header in question.matrix.header %}
+                                        <th>{{ header }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record in question.matrix.records %}
+                                <tr>
+                                    <td>{{ record['name'] }}</td>
+                                    {% for field in question.matrix.header %}
+                                    <td>{{ record[field] }}</td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                </div>
                 <div class="instructions">
                     ({{ session['questions_left'] }}/{{ session['sum_questions'] }}) <br />
                     Select {{ num_select }} choice{% if question.is_multiple_choice %}s{% endif %}:
