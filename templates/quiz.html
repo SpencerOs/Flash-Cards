@@ -64,7 +64,10 @@
                     </div>
                 </form>
             {% else %}
-                <div class="question">{{ question.text }}<br />
+                <div class="question">
+                    {% for line in question.text %}
+                        {{ line }}<br />
+                    {% endfor %}
                     {% if question.has_matrix %}
                         <table>
                             <thead>
