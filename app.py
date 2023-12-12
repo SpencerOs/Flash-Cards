@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, jsonify, render_template, request, redirect, url_for, session
 from pprint import pprint
 from typing import Final
 import json
@@ -29,6 +29,33 @@ def index():
     print(files)
     return render_template('index.html', files=files)
 
+@app.route('/get_attempts_data', methods=['GET'])
+def get_attempts_data():
+    # Retrieve the filename from the request parameters
+    filename = request.args.get('filename')
+
+    # Constructs the path to the JSON file
+    file_path = os.path.join(app.root_path, filename)
+
+    # Initialize an empty list for attempts
+    attempts = []
+    questions_count = 0
+
+    # Safely load the JSON file
+    if os.path.isfile(file_path):
+        try:
+            with open(file_path, 'r') as file:
+                data = json.load(file)
+                attempts = data.get('attempts', []) # Get attempts, default to empty list
+                questions = data.get('questions', []) # Get questions
+                questions_count = len(questions)
+        except json.JSONDecodeError:
+            # Handle the cases where the JSON file is not properly formatted
+            print(f"Error reading JSON file: {filename}")
+
+    # Send back the attempts data
+    return jsonify(attempts=attempts, questionsCount = questions_count)
+
 @app.route('/quiz', methods=['GET', 'POST'])
 def quiz():
     if request.method == 'POST':
@@ -41,6 +68,7 @@ def quiz():
             session[remaining_questions_STR] = question_ids
             session[selected_file_STR] = selected_file
             session['sum_questions'] = len(questions_data)
+            session['questions_answered'] = 0
             shuffle_questions()
         
         # If submitting an answer
@@ -48,6 +76,7 @@ def quiz():
             current_question = session['current_question']
             selected_answers = request.form.getlist('answer')
             correct_answers = current_question[correct_STR]
+            session['questions_answered'] += 1
             if set(selected_answers) == set(correct_answers):
                 # Correct answer, remove from remaining questions
                 pull_new_question()
@@ -83,17 +112,28 @@ def quiz():
                                             num_select=num_select)
     # No questions remaining, or not started, redirect to index
     else:
+        append_attempt()
         session.pop('current_question', None)
         session.pop('current_quesstion_id', None)
+        session.pop('questions_answered', None)
         session.pop(remaining_questions_STR, None)
         session.pop(selected_file_STR, None)
         session.pop(feedback_STR, None)
         session.pop(feedback_STR, None)
         return redirect(url_for('index'))
+    
+def append_attempt():
+    with open(session[selected_file_STR], 'r') as file:
+        data = json.load(file)
+    
+    data['attempts'].append(session['questions_answered'])
+
+    with open(session[selected_file_STR], 'w') as file:
+        json.dump(data, file, indent=4)
 
 def load_questions(filename):
     with open(filename, 'r') as file:
-        questions = json.load(file)
+        questions = json.load(file)['questions']
 
     for question in questions:
         question['is_multiple_choice'] = len(question[correct_STR]) > 1

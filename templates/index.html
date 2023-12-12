@@ -5,19 +5,65 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Select Quiz</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
     <body>
         <h1>Select Quiz</h1>
         <form action="/quiz" method="post">
             <div class="submitting-area">
                 <div class="abs-center">
-                    <select name="selected_file">
+                    <select name="selected_file" id="selected_file" onchange="loadQuizData()">
                         {% for file in files %}
                         <option value="{{ file }}">{{ file }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <button type="submit">Start Quiz</button>
+                <div class="canvas-container">
+                    <canvas id="attemptsChart" style="display: none;"></canvas>
+                </div>
+                <script>
+                    function loadQuizData() {
+                        var selectedQuiz = document.getElementById('selected_file').value;
+
+                        // Make an AJAX request to the Flask endpoint
+                        fetch(`/get_attempts_data?filename=${encodeURIComponent(selectedQuiz)}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.attempts.length === 0) {
+                                    document.getElementById('attemptsChart').style.display = 'none';
+                                } else {
+                                    document.getElementById('attemptsChart').style.display = 'block';
+                                    updateGraph(data.attempts, data.questionsCount);
+                                }
+                            });
+                    }
+
+                    function updateGraph(attemptsData, questionsCount) {
+                        const ctx = document.getElementById('attemptsChart').getContext('2d');
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: attemptsData.map((_, index) => index + 1),
+                                datasets: [{
+                                    label: 'Questions Answered',
+                                    data: attemptsData,
+                                    fill: false,
+                                    borderColor: 'rgb(75, 192, 192)',
+                                    tension: 0.1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: false,
+                                        min: questionsCount
+                                    }
+                                }
+                            }
+                        });
+                    }
+                </script>
             </div>
         </form>
     </body>
