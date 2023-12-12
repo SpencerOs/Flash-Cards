@@ -23,6 +23,8 @@
                     <canvas id="attemptsChart" style="display: none;"></canvas>
                 </div>
                 <script>
+                    let resultsChart = null;
+
                     function loadQuizData() {
                         var selectedQuiz = document.getElementById('selected_file').value;
 
@@ -41,7 +43,12 @@
 
                     function updateGraph(attemptsData, questionsCount) {
                         const ctx = document.getElementById('attemptsChart').getContext('2d');
-                        new Chart(ctx, {
+
+                        if (resultsChart) {
+                            resultsChart.destroy();
+                        }
+                        
+                        resultsChart = new Chart(ctx, {
                             type: 'line',
                             data: {
                                 labels: attemptsData.map((_, index) => index + 1),
