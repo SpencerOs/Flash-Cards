@@ -3,47 +3,72 @@
         {
             "text": "What is the capital of France?",
             "options": [
-                "Paris",
-                "London",
-                "Rome",
-                "Berlin"
-            ],
-            "correct": [
-                "Paris"
+                {
+                    "text": "Paris",
+                    "isCorrect": true
+                },
+                {
+                    "text": "London",
+                    "isCorrect": false
+                },
+                {
+                    "text": "Rome",
+                    "isCorrect": false
+                },
+                {
+                    "text": "Berlin",
+                    "isCorrect": false
+                }
             ],
             "id": "000"
         },
         {
             "text": "Which elements are gases at room temperature?",
             "options": [
-                "Oxygen",
-                "Carbon",
-                "Nitrogen",
-                "Helium"
-            ],
-            "correct": [
-                "Oxygen",
-                "Nitrogen",
-                "Helium"
+                {
+                    "text": "Oxygen",
+                    "isCorrect": true
+                },
+                {
+                    "text": "Carbon",
+                    "isCorrect": false
+                },
+                {
+                    "text": "Nitrogen",
+                    "isCorrect": true
+                },
+                {
+                    "text": "Helium",
+                    "isCorrect": true
+                }
             ],
             "id": "001"
         },
         {
             "text": "Is Python a programming language?",
             "options": [
-                "True",
-                "False"
-            ],
-            "correct": [
-                "True"
+                {
+                    "text": "True",
+                    "isCorrect": true
+                },
+                {
+                    "text": "False",
+                    "isCorrect": false
+                }
             ],
             "id": "002"
         },
         {
             "text": "Select the value in the bottom right-hand corner of the table",
             "options": [
-                "yeah",
-                "nope"
+                {
+                    "text": "yeah",
+                    "isCorrect": true
+                },
+                {
+                    "text": "nope",
+                    "isCorrect": false
+                }
             ],
             "matrix": {
                 "header": [
@@ -63,9 +88,6 @@
                     }
                 ]
             },
-            "correct": [
-                "yeah"
-            ],
             "id": "003"
         }
     ],

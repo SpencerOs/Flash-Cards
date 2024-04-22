@@ -7,6 +7,18 @@ json_file_path = 'ExampleQuestions.json'
 def add_ids_to_questions(questions):
     for i, question in enumerate(questions):
         question['id'] = f'{i:03d}'
+        # Let's reformat the ids in a more sane way
+        # Get the options, and the correct selection
+        if 'correct' in question:
+            options = question['options']
+            correct = question['correct']
+            
+            updated_options = [{"text": option, "isCorrect": (option in correct)} for option in options]
+
+            question['options'] = updated_options
+
+            del question["correct"]
+
 
 # Read the JSON file
 with open(json_file_path, 'r') as file:

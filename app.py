@@ -75,7 +75,7 @@ def quiz():
         elif 'answer' in request.form:
             current_question = session['current_question']
             selected_answers = request.form.getlist('answer')
-            correct_answers = current_question[correct_STR]
+            correct_answers = [opt['text'] for opt in current_question['options'] if opt['isCorrect']]
             session['questions_answered'] += 1
             if set(selected_answers) == set(correct_answers):
                 # Correct answer, remove from remaining questions
@@ -89,7 +89,6 @@ def quiz():
                 session[feedback_STR] = errMsg
                 session[feedback_class_STR] = error_STR
                 session[got_question_STR] = 'Incorrect.'
-                session['correct_options'] = current_question[correct_STR]
         # If requesting the next question, clear feedback
         elif 'next' in request.form:
             session.pop(feedback_STR, None)
@@ -104,7 +103,7 @@ def quiz():
     if remaining_questions_STR in session and session[remaining_questions_STR]:
         current_question = session['current_question']
         random.shuffle(current_question['options']) # Shuffle the options every time so that I have to memorize the answer, not the order
-        num_select = len(current_question[correct_STR])
+        num_select = sum(1 for option in current_question['options'] if option['isCorrect'])
         quiz_title = session[selected_file_STR].rsplit('.', 1)[0] # Extract title from filename
         session['questions_left'] = len(session[remaining_questions_STR])
         return render_template('quiz.html', question=current_question,
@@ -136,7 +135,6 @@ def load_questions(filename):
         questions = json.load(file)['questions']
 
     for question in questions:
-        question['is_multiple_choice'] = len(question[correct_STR]) > 1
         question['has_matrix'] = 'matrix' in question
 
     return questions

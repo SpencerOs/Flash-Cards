@@ -93,18 +93,18 @@
                 </div>
                 <div class="instructions">
                     ({{ session['questions_left'] }}/{{ session['sum_questions'] }}) <br />
-                    Select {{ num_select }} choice{% if question.is_multiple_choice %}s{% endif %}:
+                    Select {{ num_select }} choice{% if num_select > 1 %}s{% endif %}:
                 </div>
                 <div class="answer-form">
                     <form id="quizForm" action="{{ url_for('quiz') }}" method="post">
                         {% for option in question.options %}
                             <div class="selection">
-                                {% if question.is_multiple_choice %}
-                                    <input type="checkbox" id="{{ loop.index }}" name="answer" value="{{ option }}">
+                                {% if num_select > 1 %}
+                                    <input type="checkbox" id="{{ loop.index }}" name="answer" value="{{ option.text }}">
                                 {% else %}
-                                    <input type="radio" id="{{ loop.index }}" name="answer" value="{{ option }}">
+                                    <input type="radio" id="{{ loop.index }}" name="answer" value="{{ option.text }}">
                                 {% endif %}
-                                <label for="{{ loop.index }}">{{ option }}</label><br>
+                                <label for="{{ loop.index }}">{{ option.text }}</label><br>
                             </div>
                         {% endfor %}
                         <div class="submitting-area">
