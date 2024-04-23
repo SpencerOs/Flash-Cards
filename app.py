@@ -146,9 +146,9 @@ def load_question():
     questions = load_questions(session[selected_file_STR])
     # then we pull the question with the matching id and we're good to go!
     session['current_question'] = [x for x in questions if x['id'] == session['current_question_id']][0]
-    session['current_question']['text'] = markdown(session['current_question']['text'])
+    session['current_question']['text'] = markdown(session['current_question']['text'], extensions=['fenced_code'])
     for option in session['current_question']['options']:
-        option['text'] = markdown(option['text'])
+        option['text'] = markdown(option['text'], extensions=['fenced_code'])
     
 
 def pull_new_question():
