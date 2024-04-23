@@ -8,6 +8,22 @@
         <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
             $(document).ready(function() {
+                // Function to update the state of the submit button
+                function updateSubmitButtonState() {
+                    var numRequired = {{ num_select }};
+                    var currentSelections = 0;
+                    if ($('input[type="checkbox"]').length > 0) {
+                        // Count only checked checkboxes if they exist
+                        currentSelections = $('input[type="checkbox"]:checked').length;
+                        $('button[type="submit"]').prop('disabled', currentSelections !== numRequired);
+                    } else if ($('input[type="radio"]').length > 0) {
+                        // Check if any radio is selected
+                        $('button[type="submit"]').prop('disabled', $('input[type="radio"]:checked').length === 0);
+                    }
+                }
+
+                updateSubmitButtonState();
+
                 // When a radio button changes
                 $('.selection input[type="radio"]').change(function() {
                     // Unhighlight all selections in the same group
@@ -19,12 +35,14 @@
                     if (this.checked) {
                         $(this).closest('.selection').addClass('checked');
                     }
+                    updateSubmitButtonState();
                 });
 
                 // When a checkbox changes
                 $('.selection input[type="checkbox"]').change(function() {
                     // Toggle the 'checked' class for this checkbox's selection
                     $(this).closest('.selection').toggleClass('checked', this.checked);
+                    updateSubmitButtonState();
                 });
 
                 $('.selection').click(function(event) {

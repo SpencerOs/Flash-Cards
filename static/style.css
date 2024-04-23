@@ -143,6 +143,12 @@ h1, h2 {
     font-size: 2rem;
 }
 
+.submitting-area button:disabled {
+    background-color: #E0E0E0;
+    color: #9E9E9E;
+    cursor: not-allowed;
+}
+
 .submitting-area select {
     margin-bottom: 2rem;
     width: 80%;
@@ -150,6 +156,10 @@ h1, h2 {
 
 .submitting-area button:hover {
     background-color: #45A049;
+}
+
+.submitting-area button:disabled:hover {
+    background-color: #E0E0E0;
 }
 
 table {
