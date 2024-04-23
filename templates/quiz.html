@@ -65,9 +65,7 @@
                 </form>
             {% else %}
                 <div class="question">
-                    {% for line in question.text %}
-                        {{ line }}<br />
-                    {% endfor %}
+                    {{ question.text|safe }}
                     {% if question.has_matrix %}
                         <table>
                             <thead>
@@ -100,11 +98,11 @@
                         {% for option in question.options %}
                             <div class="selection">
                                 {% if num_select > 1 %}
-                                    <input type="checkbox" id="{{ loop.index }}" name="answer" value="{{ option.text }}">
+                                    <input type="checkbox" id="{{ loop.index }}" name="answer" value="{{ option.text|safe }}">
                                 {% else %}
-                                    <input type="radio" id="{{ loop.index }}" name="answer" value="{{ option.text }}">
+                                    <input type="radio" id="{{ loop.index }}" name="answer" value="{{ option.text|safe }}">
                                 {% endif %}
-                                <label for="{{ loop.index }}">{{ option.text }}</label><br>
+                                <label for="{{ loop.index }}">{{ option.text|safe }}</label><br>
                             </div>
                         {% endfor %}
                         <div class="submitting-area">

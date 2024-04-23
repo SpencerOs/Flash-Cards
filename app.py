@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for, session
+from markdown import markdown
 from pprint import pprint
 from typing import Final
 import json
@@ -141,9 +142,14 @@ def load_questions(filename):
 
 def load_question():
     session['current_question_id'] = session[remaining_questions_STR][0]
+    # We have to pull the questions from the file...
     questions = load_questions(session[selected_file_STR])
+    # then we pull the question with the matching id and we're good to go!
     session['current_question'] = [x for x in questions if x['id'] == session['current_question_id']][0]
-    session['current_question']['text'] = session['current_question']['text'].split('\n')
+    session['current_question']['text'] = markdown(session['current_question']['text'])
+    for option in session['current_question']['options']:
+        option['text'] = markdown(option['text'])
+    
 
 def pull_new_question():
     session[remaining_questions_STR].pop(0)
