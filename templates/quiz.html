@@ -71,7 +71,7 @@
                 <ul>
                     {% for answer in session['correct_options'] %}
                         <li>
-                            {{ answer }}
+                            {{ answer|safe }}
                         </li>
                     {% endfor %}
                 </ul>

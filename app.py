@@ -90,6 +90,7 @@ def quiz():
                 session[feedback_STR] = errMsg
                 session[feedback_class_STR] = error_STR
                 session[got_question_STR] = 'Incorrect.'
+                session['correct_options'] = correct_answers
         # If requesting the next question, clear feedback
         elif 'next' in request.form:
             session.pop(feedback_STR, None)
