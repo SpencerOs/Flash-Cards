@@ -8,3 +8,9 @@ Now you can either quiz yourself from your desk, or any couch in your house from
 I have found that it's extremely easy to make study materials this way by tossing a study-guide's worth of example questions from anywhere to ChatGPT, and having it format the question into the JSON we're looking for; in case you do this, you don't need Ids for each question right off the bat you can instead just run addIdsToQuestions.py with the right .json filename edited into the script on line 4.
 
 Happy studying!
+
+
+*Update:*
+These flashcards now support markdown! Finally you'll be able to read code that's actually formatted as code!
+Of course because markdown is the least standardized format in the world, the answer-key for how python's Markdown package parses everything appears to be found here (based on their own documentation).
+I mainly put this link [here](https://daringfireball.net/projects/markdown/syntax) for myself so that I will one day remember how to write code-blocks.
