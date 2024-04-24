@@ -4,8 +4,39 @@ body {
     color: #CCCCCC;
 }
 
+code span.line {
+    display: block;                 /* Each line becomes a block */
+    counter-increment: line;
+    padding: 0 .75rem;              /* Padding on each line for text alignment */
+    line-height: .75;
+}
+
+code span.line::before {
+    content: counter(line);         /* Inserts the line number */
+    position: absolute;
+    left: 0;
+    width: 2rem;                    /* Adjust the width as needed */
+    text-align: right;
+    color: #888;
+}
+
 h1, h2 {
     color: #AAAAAA;
+}
+
+pre {
+    position: relative;
+    padding-left: 3rem;             /* Increase space for line numbers if needed */
+    counter-reset: line;
+    border: 1px solid #ccc;
+    overflow: auto;                 /* Make sure it scrolls horizontally if the content is too wide */
+    white-space: pre-wrap;          /* Ensures that the code wraps */
+    word-wrap: break-word;          /* Ensures words do not overflow their container */
+}
+
+pre code {
+    display: block;                 /* Ensures that the code behaves like a block */
+    padding-top: 1.5rem;            /* Adds padding inside the code element */
 }
 
 .abs-center {

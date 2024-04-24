@@ -75,9 +75,10 @@ def quiz():
         # If submitting an answer
         elif 'answer' in request.form:
             current_question = session['current_question']
-            selected_answers = request.form.getlist('answer')
-            correct_answers = [opt['text'] for opt in current_question['options'] if opt['isCorrect']]
+            selected_answers = [answer.replace("\r", "") for answer in request.form.getlist('answer')]
+            correct_answers = [opt['plaintext'] for opt in current_question['options'] if opt['isCorrect']]
             session['questions_answered'] += 1
+            print(f'selected_answers: {set(selected_answers)}\ncorrect_answers: {set(correct_answers)}')
             if set(selected_answers) == set(correct_answers):
                 # Correct answer, remove from remaining questions
                 pull_new_question()
@@ -149,6 +150,7 @@ def load_question():
     session['current_question'] = [x for x in questions if x['id'] == session['current_question_id']][0]
     session['current_question']['text'] = markdown(session['current_question']['text'], extensions=['fenced_code'])
     for option in session['current_question']['options']:
+        option['plaintext'] = option['text']
         option['text'] = markdown(option['text'], extensions=['fenced_code'])
     
 

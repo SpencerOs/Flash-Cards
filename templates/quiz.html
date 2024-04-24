@@ -58,6 +58,24 @@
                 });
             });
         </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var preElements = document.getElementsByTagName("pre");
+
+                for (var i = 0; i < preElements.length; i++) {
+                    var code = preElements[i].getElementsByTagName("code")[0];
+                    var lines = code.textContent.split('\n');
+                    var newCode = '';
+                    for (var j = 0; j < lines.length; j++) {
+                        // Only add non-empty lines to avoid extra empty spans
+                        if (lines[j].trim() !== '') {
+                            newCode += '<span class="line">' + lines[j] + '</span>\n';
+                        }
+                    }
+                    code.innerHTML = newCode;
+                }
+            });
+        </script>
     </head>
     <body>
         <div class="form-container">
@@ -116,9 +134,9 @@
                         {% for option in question.options %}
                             <div class="selection">
                                 {% if num_select > 1 %}
-                                    <input type="checkbox" id="{{ loop.index }}" name="answer" value="{{ option.text|safe }}">
+                                    <input type="checkbox" id="{{ loop.index }}" name="answer" value="{{ option.plaintext }}">
                                 {% else %}
-                                    <input type="radio" id="{{ loop.index }}" name="answer" value="{{ option.text|safe }}">
+                                    <input type="radio" id="{{ loop.index }}" name="answer" value="{{ option.plaintext }}">
                                 {% endif %}
                                 <label for="{{ loop.index }}">{{ option.text|safe }}</label><br>
                             </div>
