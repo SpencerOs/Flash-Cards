@@ -93,6 +93,11 @@
                         </li>
                     {% endfor %}
                 </ul>
+                {% if session['ai_feedback'] %}
+                <p>
+                    {{ session['ai_feedback'] }}
+                </p>
+                {% endif %}
             </div>
                 <form action="{{ url_for('quiz') }}" method="post">
                     <div class="submitting-area">

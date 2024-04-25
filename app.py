@@ -6,8 +6,11 @@ import json
 import random
 import os
 
+from Tutor import Tutor
+
 app = Flask(__name__)
 app.secret_key = 'Thiss iss my ssecret key.'
+tutor = Tutor()
 
 correct_STR: Final = 'correct'
 correct_message_STR: Final = 'Correct!'
@@ -17,9 +20,9 @@ feedback_class_STR: Final = 'feedback_class'
 got_question_STR: Final = 'got_question'
 quantity_STR: Final = 'og_quantity'
 quiz_html_STR: Final = 'quiz.html'
+remaining_questions_STR: Final = 'remaining_questions'
 selected_file_STR: Final = 'selected_file'
 success_STR: Final = 'success'
-remaining_questions_STR: Final = 'remaining_questions'
 
 
 # Routes and logic here
@@ -92,6 +95,7 @@ def quiz():
                 session[feedback_class_STR] = error_STR
                 session[got_question_STR] = 'Incorrect.'
                 session['correct_options'] = correct_answers
+                session['ai_feedback'] = tutor.write_explanation(question=current_question['text'], incorrect_answer=selected_answers, correct_answer=correct_answers)
         # If requesting the next question, clear feedback
         elif 'next' in request.form:
             session.pop(feedback_STR, None)
