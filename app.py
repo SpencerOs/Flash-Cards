@@ -90,7 +90,6 @@ def quiz():
             selected_answers = [answer.replace("\r", "") for answer in request.form.getlist('answer')]
             correct_answers = [opt['plaintext'] for opt in current_question['options'] if opt['isCorrect']]
             session['questions_answered'] += 1
-            print(f'selected_answers: {set(selected_answers)}\ncorrect_answers: {set(correct_answers)}')
             if set(selected_answers) == set(correct_answers):
                 # Correct answer, remove from remaining questions
                 pull_new_question()
