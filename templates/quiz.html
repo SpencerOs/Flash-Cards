@@ -45,7 +45,10 @@
                     updateSubmitButtonState();
                 });
 
-                $('.selection').click(function(event) {
+                $('.selection').on('click touchstart', function(event) {
+                    // Prevent default to avoid any native behavior that might conflict with the script
+                    event.preventDefault();
+                    
                     // Find the input within this .selection and toggle its state
                     var input = $(this).find('input');
                     if (
