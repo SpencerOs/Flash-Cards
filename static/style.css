@@ -4,6 +4,12 @@ body {
     color: #CCCCCC;
 }
 
+code {
+    /* Applies to both inline and block code unless overridden by specific selectors */
+    padding: 0 0.2rem;              /* Slight padding around inilne code */
+    background
+}
+
 code span.line {
     display: block;                 /* Each line becomes a block */
     counter-increment: line;
@@ -37,6 +43,10 @@ pre {
 pre code {
     display: block;                 /* Ensures that the code behaves like a block */
     padding-top: 1.5rem;            /* Adds padding inside the code element */
+    padding: 0.75rem;               /* Uniform padding for better alignment and readability */
+    line-height: 1.6;               /* Increased line height for better readability */
+    white-space: pre;
+    word-wrap: break-word;          /* Ensures words do not overflow their container */
 }
 
 .abs-center {
