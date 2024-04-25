@@ -48,7 +48,7 @@
                 $('.selection').on('click touchstart', function(event) {
                     // Prevent default to avoid any native behavior that might conflict with the script
                     event.preventDefault();
-                    
+
                     // Find the input within this .selection and toggle its state
                     var input = $(this).find('input');
                     if (
@@ -58,7 +58,15 @@
                     ) {
                         input.trigger('click');
                     }
+
                 });
+
+                if ("{{ session['feedback'] }}") {
+                    var question = "{{ question.text }}";
+                    var incorrectAnswers = "{{ session['incorrect_options'] }}";
+                    var correctAnswers = "{{ session['correct_options'] }}";
+                    requestExplanation(question, incorrectAnswers, correctAnswers)
+                }
             });
         </script>
         <script>
@@ -79,6 +87,86 @@
                 }
             });
         </script>
+        <script>
+            function requestExplanation(question, incorrectAnswer, correctAnswer) {
+                $('#loading_spinner').show(); // Show the spinner
+                createDots();
+
+                $.ajax({
+                    url: '/generate_explanation',
+                    type: 'GET',
+                    contentType: 'application/json',
+                    success: function(response) {
+                        $('#ai_feedback').html(response.explanation);
+                        $('#loading_spinner').hide();
+                        stopAnimation();
+                    },
+                    error: function() {
+                        $('#ai_feedback').html('Error generating explanation. Please try again later.');
+                        $('#loading_spinner').hide();
+                        stopAnimation();
+                    }
+                })
+            }
+
+            function createDots() {
+                const spinner = document.getElementById('loading_spinner');
+                const dotsCount = 32; // Number of dots
+
+                for (let i = 0; i < dotsCount; i++) {
+                    addDot(spinner);
+                }
+            }
+
+            function addDot(container) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                container.appendChild(dot);
+                animateDot(dot, container);
+            }
+
+            function animateDot(dot, container) {
+                // Assign random properties to each dot
+                dot.style.left = `${Math.random() * 100}%`;
+                dot.style.width = dot.style.height = `${Math.random() * 17 + 2}px`;
+                dot.style.opacity = Math.random() * 0.5 + 0.25;
+                setDotColor(dot)
+
+                // Set initial position and random duration
+                const duration = Math.random() * 6 + 1;     // Random duration between 3s and 6s
+                dot.style.transition = `bottom ${duration}s ease-in, opacity ${duration}s ease-out`;
+                dot.style.bottom = '-10px';                 // Start below the container
+
+                // Start the animation
+                setTimeout(() => {
+                    dot.style.bottom = '110%';              // End above the container
+                    dot.style.opacity = 0;
+                }, duration * 1000);
+
+                // Remove the dot after it completes its journey and add a new one
+                setTimeout(() => {
+                    if  (container.contains(dot)) {
+                        container.removeChild(dot);
+                        addDot(container);                      // Add a new dot after the old one is removed
+                    }
+                }, duration * 1000);
+            }
+
+            function setDotColor(dot) {
+                const leftPercentage = parseFloat(dot.style.left); // Remove the '%' and convert to float
+                const hue = leftPercentage * 3;                     // Scale the percentage to the hue range (0% at 0 and 100% at 300)
+                const color = `hsl(${hue}, 100%, 50%)`;             // Set full saturation and 50% lightness
+                dot.style.backgroundColor = color;
+            }
+
+            function stopAnimation() {
+                const spinner = document.getElementById('loading_spinner');
+                spinner.innerHTML = '';
+            }
+
+            // Expose createDots to be callable globally or from other scripts
+            window.createDots = createDots;
+        </script>
     </head>
     <body>
         <div class="form-container">
@@ -90,17 +178,16 @@
                 </h1>
                 <div class="{{ session['feedback_class'] }}">{{ session['feedback'] }}</div>
                 <ul>
-                    {% for answer in session['correct_options'] %}
-                        <li>
-                            {{ answer|safe }}
-                        </li>
+                    {% for answer in question.options %}
+                        {% if answer['isCorrect'] %}
+                            <li>
+                                {{ answer['text']|safe }}
+                            </li>
+                        {% endif %}
                     {% endfor %}
                 </ul>
-                {% if session['ai_feedback'] %}
-                <p>
-                    {{ session['ai_feedback'] }}
-                </p>
-                {% endif %}
+                <div id="ai_feedback"></div>
+                <div id="loading_spinner"></div>
             </div>
                 <form action="{{ url_for('quiz') }}" method="post">
                     <div class="submitting-area">

@@ -60,6 +60,15 @@ def get_attempts_data():
     # Send back the attempts data
     return jsonify(attempts=attempts, questionsCount = questions_count)
 
+@app.route('/generate_explanation', methods=['GET'])
+def generate_explanation():
+    question = session['current_question']['plaintext']
+    incorrect_answers = session['incorrect_options']
+    correct_answers = [opt['plaintext'] for opt in session['current_question']['options'] if opt['isCorrect']]
+    session['current_question']
+    explanation = tutor.write_explanation(question, incorrect_answer=incorrect_answers, correct_answer=correct_answers)
+    return jsonify({'explanation': explanation})
+
 @app.route('/quiz', methods=['GET', 'POST'])
 def quiz():
     if request.method == 'POST':
@@ -88,15 +97,13 @@ def quiz():
                 session[got_question_STR] = 'Correct!'
                 session[feedback_class_STR] = success_STR
             else:
-                # Incorrect answer, reset the board!
+                # Incorrect answer, show feedback
                 errMsg = f"The correct answer was:"
-                shuffle_questions()
                 session[feedback_STR] = errMsg
                 session[feedback_class_STR] = error_STR
                 session[got_question_STR] = 'Incorrect.'
-                session['correct_options'] = correct_answers
-                session['ai_feedback'] = tutor.write_explanation(question=current_question['text'], incorrect_answer=selected_answers, correct_answer=correct_answers)
-        # If requesting the next question, clear feedback
+                session['incorrect_options'] = selected_answers
+        # If requesting the next question, clear feedback & get the next question
         elif 'next' in request.form:
             session.pop(feedback_STR, None)
             session.pop(feedback_class_STR, None)
@@ -105,6 +112,9 @@ def quiz():
                 # Quiz completed, redirect to a completion page or back to quiz selection
                 session.pop(remaining_questions_STR, None)
                 session.pop(selected_file_STR, None)
+            # Otherwise there are still some!
+            else:
+                shuffle_questions()
                 
     # If there are questions remaining, display the next question
     if remaining_questions_STR in session and session[remaining_questions_STR]:
@@ -152,10 +162,14 @@ def load_question():
     questions = load_questions(session[selected_file_STR])
     # then we pull the question with the matching id and we're good to go!
     session['current_question'] = [x for x in questions if x['id'] == session['current_question_id']][0]
+    session['current_question']['plaintext'] = session['current_question']['text']
     session['current_question']['text'] = markdown(session['current_question']['text'], extensions=['fenced_code'])
+    session['correct_options'] = []
     for option in session['current_question']['options']:
         option['plaintext'] = option['text']
         option['text'] = markdown(option['text'], extensions=['fenced_code'])
+        if option['isCorrect']:
+            session['correct_options'].append(option)
     
 
 def pull_new_question():

@@ -7,7 +7,6 @@ body {
 code {
     /* Applies to both inline and block code unless overridden by specific selectors */
     padding: 0 0.2rem;              /* Slight padding around inilne code */
-    background
 }
 
 code span.line {
@@ -49,6 +48,16 @@ pre code {
     word-wrap: break-word;          /* Ensures words do not overflow their container */
 }
 
+table {
+    margin: 1rem;
+}
+
+td, th {
+    border-width: 0.07rem;
+    border-style: solid;
+    padding: 0.75rem;
+}
+
 .abs-center {
     margin: 0 auto;
 }
@@ -61,6 +70,17 @@ pre code {
     max-width: 400px;
     max-height: 400px;
     margin: 0 auto;
+}
+
+.dot {
+    position: absolute;
+    bottom: -20px;              /* Start below container */
+    background-color: white;    /* Color of dots */
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    opacity: 0.6;
+    animation: riseUp 5s infinite ease-in;
 }
 
 .error {
@@ -203,16 +223,31 @@ pre code {
     background-color: #E0E0E0;
 }
 
-table {
-    margin: 1rem;
+#loading_spinner {
+    position: relative;
+    height: 100px;
+    width: 100%;
+    overflow: visible;
 }
 
-td, th {
-    border-width: 0.07rem;
-    border-style: solid;
-    padding: 0.75rem;
+@keyframes riseUp {
+    0% {
+        bottom: -20px;
+        opacity: 1;
+    }
+    50% {
+        bottom: 60%;
+        opacity: 0.5;
+    }
+    90% {
+        bottom: 100%;
+        opacity: 0.1;
+    }
+    100% {
+        bottom: 120%;
+        opacity: 0;
+    }
 }
-
 
 /* Override style for mobile devices */
 @media (max-width: 768px) {
