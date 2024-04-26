@@ -113,6 +113,7 @@ def quiz():
                 session.pop(selected_file_STR, None)
             # Otherwise there are still some!
             else:
+                session.pop('incorrect_options', None)
                 shuffle_questions()
                 
     # If there are questions remaining, display the next question

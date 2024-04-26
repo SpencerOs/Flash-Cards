@@ -262,12 +262,16 @@ td, th {
 
     .question {
         font-size: 1.25rem;
-        margin-top: 3rem;
+        margin-top: 1rem;
         padding-bottom: 0;
     }
 
     .selection, .submitting-area button, select {
         margin: 0;
         padding: 1rem;
+    }
+
+    .selection {
+        overflow-y: scroll;
     }
 }

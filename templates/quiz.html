@@ -45,7 +45,7 @@
                     updateSubmitButtonState();
                 });
 
-                $('.selection').on('click touchstart', function(event) {
+                $('.selection').on('click touchend', function(event) {
                     // Prevent default to avoid any native behavior that might conflict with the script
                     event.preventDefault();
 
@@ -62,10 +62,7 @@
                 });
 
                 if ("{{ session['feedback'] }}") {
-                    var question = "{{ question.text }}";
-                    var incorrectAnswers = "{{ session['incorrect_options'] }}";
-                    var correctAnswers = "{{ session['correct_options'] }}";
-                    requestExplanation(question, incorrectAnswers, correctAnswers)
+                    requestExplanation()
                 }
             });
         </script>
@@ -88,7 +85,7 @@
             });
         </script>
         <script>
-            function requestExplanation(question, incorrectAnswer, correctAnswer) {
+            function requestExplanation() {
                 $('#loading_spinner').show(); // Show the spinner
                 createDots();
 
@@ -170,7 +167,7 @@
     </head>
     <body>
         <div class="form-container">
-            <h1><a href="/"><</a></h1>
+            <h3><a href="/" style="text-decoration: none"><</a></h3>
             {% if session['feedback'] %}
             <div class="instructions">
                 ({{ session['questions_left'] }}/{{ session['sum_questions'] }})
