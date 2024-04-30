@@ -144,7 +144,9 @@
                 setTimeout(() => {
                     if  (container.contains(dot)) {
                         container.removeChild(dot);
-                        addDot(container);                      // Add a new dot after the old one is removed
+                        setTimeout(() => {
+                            addDot(container);                      // Add a new dot after the old one is removed
+                        }, duration * 10);
                     }
                 }, duration * 1000);
             }
@@ -174,6 +176,7 @@
                 <h1>
                     {{ session['got_question'] }}
                 </h1>
+                {{ question.text|safe }}
                 <div class="{{ session['feedback_class'] }}">{{ session['feedback'] }}</div>
                 <ul>
                     {% for answer in question.options %}
@@ -182,6 +185,14 @@
                                 {{ answer['text']|safe }}
                             </li>
                         {% endif %}
+                    {% endfor %}
+                </ul>
+                <div class="{{ session['feedback_class'] }}">Your answer:</div>
+                <ul>
+                    {% for answer in session['incorrect_options'] %}
+                        <li>
+                            {{ answer }}
+                        </li>
                     {% endfor %}
                 </ul>
                 <div id="ai_feedback"></div>
